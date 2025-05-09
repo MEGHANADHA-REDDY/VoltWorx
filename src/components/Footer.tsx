@@ -5,7 +5,7 @@ function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="container py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           <div className="col-span-1 md:col-span-1">
             <Link to="/" className="flex items-center space-x-2">
               <span className="text-xl font-bold">VoltWorx</span>
@@ -39,8 +39,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-gray-300 hover:text-white transition-colors">
-                  Success Stories
+                <Link to="/student-code-of-conduct" className="text-gray-300 hover:text-white transition-colors">
+                  Code of Conduct
                 </Link>
               </li>
             </ul>
@@ -60,8 +60,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-gray-300 hover:text-white transition-colors">
-                  Success Stories
+                <Link to="/startup-guidelines" className="text-gray-300 hover:text-white transition-colors">
+                  Guidelines
                 </Link>
               </li>
               <li>
@@ -91,8 +91,29 @@ function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/refund-policy" className="text-gray-300 hover:text-white transition-colors">
+                  Refund Policy
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400">Legal</h3>
+            <ul className="mt-4 space-y-2">
+              <li>
+                <Link to="/terms-and-conditions" className="text-gray-300 hover:text-white transition-colors">
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
                 <Link to="/privacy-policy" className="text-gray-300 hover:text-white transition-colors">
                   Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/disclaimer" className="text-gray-300 hover:text-white transition-colors">
+                  Disclaimer
                 </Link>
               </li>
             </ul>

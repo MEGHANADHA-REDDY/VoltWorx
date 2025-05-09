@@ -20,6 +20,10 @@ const About = lazy(() => import('./pages/About'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
+const RefundPolicy = lazy(() => import('./pages/RefundPolicy'));
+const Disclaimer = lazy(() => import('./pages/Disclaimer'));
+const StudentCodeOfConduct = lazy(() => import('./pages/StudentCodeOfConduct'));
+const StartupGuidelines = lazy(() => import('./pages/StartupGuidelines'));
 
 function App() {
   const { isLoading } = useAuth();
@@ -49,6 +53,10 @@ function App() {
           <Route path="privacy-policy" element={<PrivacyPolicy />} />
           <Route path="terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="contact-us" element={<ContactUs />} />
+          <Route path="refund-policy" element={<RefundPolicy />} />
+          <Route path="disclaimer" element={<Disclaimer />} />
+          <Route path="student-code-of-conduct" element={<StudentCodeOfConduct />} />
+          <Route path="startup-guidelines" element={<StartupGuidelines />} />
           
           {/* Student routes */}
           <Route
