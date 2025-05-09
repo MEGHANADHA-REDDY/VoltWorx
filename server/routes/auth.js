@@ -137,25 +137,42 @@ router.post('/google', async (req, res) => {
     if (!payload?.email) {
       return res.status(400).json({ message: 'Google account has no email' });
     }
-    // Find or create user
+
+    // Check both Student and Startup models for existing user
     let user = await Student.findOne({ email: payload.email });
     let role = 'student';
+    
     if (!user) {
-      user = await Student.create({
-        name: payload.name || payload.email,
-        email: payload.email,
-        password: Math.random().toString(36).slice(-8), // random password
-        skills: [],
-        phone: '',
-      });
+      user = await Startup.findOne({ email: payload.email });
+      if (user) {
+        role = 'startup';
+      } else {
+        // If user doesn't exist in either model, return error
+        return res.status(404).json({ 
+          message: 'No account found with this email. Please register first.',
+          email: payload.email,
+          name: payload.name
+        });
+      }
     }
-    // Generate JWT
+
+    // Generate JWT with the correct role
     const token = jwt.sign(
-      { id: user._id, role },
+      { id: user._id, role: user.role || role },
       process.env.JWT_SECRET || 'your-secret-key',
       { expiresIn: '7d' }
     );
-    res.json({ token, user });
+
+    res.json({ 
+      token, 
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role || role,
+        ...(user.role === 'student' || role === 'student' ? { skills: user.skills } : { company: user.company })
+      }
+    });
   } catch (error) {
     console.error('Google OAuth error:', error);
     res.status(500).json({ message: 'Google login failed', error: error.message });

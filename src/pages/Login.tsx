@@ -45,7 +45,10 @@ function Login() {
       // Log for debugging
       console.log('Google credential received:', credentialResponse.credential);
       // Send credential to backend
-      const payload = { credential: credentialResponse.credential };
+      const payload = { 
+        credential: credentialResponse.credential,
+        role: role // Send the selected role to the backend
+      };
       console.log('Sending payload to backend:', payload);
       const response = await fetch('/api/auth/google', {
         method: 'POST',
@@ -62,6 +65,21 @@ function Login() {
       }
       console.log('Backend response status:', response.status);
       console.log('Backend response body:', data);
+      
+      if (response.status === 404) {
+        // User needs to register first
+        setGoogleError('No account found. Please register first.');
+        // Store the email and role for registration
+        if (data.email) {
+          localStorage.setItem('googleEmail', data.email);
+          localStorage.setItem('googleRegistrationRole', role);
+          // Redirect to register page
+          navigate('/register');
+        }
+        setGoogleLoading(false);
+        return;
+      }
+      
       if (!response.ok) {
         // Log the full error object and raw text
         console.error('Google login error (full object):', data);
@@ -74,6 +92,14 @@ function Login() {
         setGoogleLoading(false);
         return;
       }
+
+      // Verify that the user's role matches the selected role
+      if (data.user?.role !== role) {
+        setGoogleError(`This email is registered as a ${data.user?.role}. Please select the correct role.`);
+        setGoogleLoading(false);
+        return;
+      }
+
       // Store token/session as needed (example: JWT)
       if (data.token) {
         localStorage.setItem('token', data.token);

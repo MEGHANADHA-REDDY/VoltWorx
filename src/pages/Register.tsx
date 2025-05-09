@@ -37,6 +37,20 @@ function Register() {
   const navigate = useNavigate();
   const [googleUser, setGoogleUser] = useState<any>(null);
 
+  // Check for Google email on component mount
+  useEffect(() => {
+    const googleEmail = localStorage.getItem('googleEmail');
+    if (googleEmail) {
+      setFormData(prev => ({
+        ...prev,
+        email: googleEmail,
+        companyEmail: googleEmail
+      }));
+      // Clear the stored email
+      localStorage.removeItem('googleEmail');
+    }
+  }, []);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -94,6 +108,7 @@ function Register() {
         name: formData.name,
         email: role === 'startup' ? formData.companyEmail : formData.email,
         password: formData.password,
+        role: role,
         ...(role === 'student' 
           ? { 
               skills: formData.skills,
@@ -127,7 +142,7 @@ function Register() {
   };
 
   // Google registration handler
-  const handleGoogleRegister = (credentialResponse: any) => {
+  const handleGoogleRegister = async (credentialResponse: any) => {
     if (credentialResponse.credential) {
       const decoded: any = jwtDecode(credentialResponse.credential);
       setGoogleUser(decoded);
@@ -135,7 +150,11 @@ function Register() {
         ...prev,
         name: decoded.name || prev.name,
         email: decoded.email || prev.email,
+        companyEmail: decoded.email || prev.email
       }));
+
+      // Store the role in localStorage for Google registration
+      localStorage.setItem('googleRegistrationRole', role);
     }
   };
 
